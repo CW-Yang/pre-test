@@ -28,6 +28,11 @@ code {
   max-width: 720px !important;
 }
 
+.item-container {
+  margin-bottom: 2rem;
+  border-bottom: 2px solid rgba(229, 224, 224, 0.851);
+}
+
 /* Input */
 input {
   min-width: 290px !important;

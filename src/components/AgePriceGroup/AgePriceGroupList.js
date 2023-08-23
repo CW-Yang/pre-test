@@ -4,9 +4,10 @@ import {
 } from "reactstrap";
 import AgeGroupSelect from "./AgeGroupSelect";
 import PriceInput from "./PriceInput";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { FiPlus } from 'react-icons/fi';
 import { FaTimes } from 'react-icons/fa';
+import getNumberIntervals from "../../utils/getNumberIntervals";
 
 const AgePriceGroupList = ({ onChange }) => {
   const initProps = {
@@ -25,22 +26,25 @@ const AgePriceGroupList = ({ onChange }) => {
     setResults(newArr);
   }, [results]);
 
-  useEffect(() => {
-    onChange && onChange(results);
+  const { overlap, notInclude } = useMemo(() => {
+    const ageGroup = results.map(result => result.ageGroup);
+    return getNumberIntervals(ageGroup);
   }, [results]);
+
+  console.log(overlap, notInclude);
 
   return (
     <Container className="group-wrapper">
       {
         results.map((result, index) => (
-          <div key={index} className="mb-3">
+          <div key={index} className="item-container">
             <div className="d-flex justify-content-between">
               <Label>{`價格設定 - ${index + 1}`}</Label>
               {
                 index !== 0 &&
                 <div 
                   className="remove-item-button"
-                  onClick={() => onRemoveItem(index)}
+                  onClick={() => onRemoveItem(result.id)}
                 >
                   <FaTimes />{' '}
                   移除
@@ -49,6 +53,7 @@ const AgePriceGroupList = ({ onChange }) => {
             </div>
             <div className='d-flex justify-content-between flex-wrap'>
               <AgeGroupSelect  
+                overlapIntervals={overlap}
                 ageGroup={result.ageGroup}
                 onChange={val => {
                   const newArr = results.map((res, i) => {
@@ -84,13 +89,16 @@ const AgePriceGroupList = ({ onChange }) => {
           </div>
         ))
       }
-      <div 
-        className="add-item-button"
-        onClick={onAddItem}
-      >
-        <FiPlus />{' '}
-        新增價格設定
-      </div>
+      {
+        notInclude.length !== 0 &&
+        <div 
+          className="add-item-button"
+          onClick={onAddItem}
+        >
+          <FiPlus />{' '}
+          新增價格設定
+        </div>
+      }
     </Container>
   );
 };

@@ -1,7 +1,8 @@
 import { Input, InputGroup, InputGroupText, Label } from "reactstrap";
 import { useMemo, useState } from "react";
+import ErrorMessage from "../ErrorMessage";
 
-const AgeGroupSelect = () => {
+const AgeGroupSelect = ({ ageGroup, onChange, overlapIntervals }) => {
   const ageOptions = useMemo(() => {
     const min = 0;
     const max = 20;
@@ -12,9 +13,8 @@ const AgeGroupSelect = () => {
     return options;
   }, []);
 
-  const [minAge, setMinAge] = useState(0);
-  const [maxAge, setMaxAge] = useState(20);
-  
+  const isInvalid = overlapIntervals.find(interval => interval.find(i => i === ageGroup[0] || i === ageGroup[1])) ? true : false;
+  console.log(isInvalid);
   return (
     <div>
       <Label className="input-label">年齡</Label>
@@ -23,17 +23,18 @@ const AgeGroupSelect = () => {
           <Input
             type="select"
             onChange={e => {
-              const value = e.target.value;
-              setMinAge(value);
+              const value = +e.target.value;
+              onChange([value, ageGroup[1]]);
             }}
-            value={minAge}
+            value={ageGroup[0]}
+            invalid={isInvalid}
           >
             {
               ageOptions.map((option, i) => (
                 <option 
                   key={i} 
                   value={option}
-                  disabled={option > maxAge}
+                  disabled={option > ageGroup[1]}
                 >
                   {option}
                 </option>
@@ -44,17 +45,18 @@ const AgeGroupSelect = () => {
           <Input
             type="select"
             onChange={e => {
-              const value = e.target.value;
-              setMaxAge(value);
+              const value = +e.target.value;
+              onChange([ageGroup[0], value]);
             }}
-            value={maxAge}
+            value={ageGroup[1]}
+            invalid={isInvalid}
           >
             {
               ageOptions.map((option, i) => (
                 <option 
                   key={i} 
                   value={option}
-                  disabled={option < minAge}
+                  disabled={option < ageGroup[0]}
                 >
                   {option}
                 </option>
@@ -63,6 +65,10 @@ const AgeGroupSelect = () => {
           </Input>
         </InputGroup>
       </div>
+      {
+          isInvalid && 
+          <ErrorMessage message={'年齡區間不可重疊'}/>
+        }
     </div>
   );
 };
