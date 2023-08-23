@@ -12,10 +12,10 @@ const PriceInput = () => {
   const [amount, setAmount] = useState(0);
   const [error, setError] = useState('');
   return (
-    <div className="price-input-group">
-      <Label className="price-input-label">入住費用 (每人每晚)</Label>
+    <div>
+      <Label className="input-label">入住費用 (每人每晚)</Label>
       <InputGroup>
-        <InputGroupText className="price-input-text">TWD</InputGroupText>
+        <InputGroupText className="input-text">TWD</InputGroupText>
         <Input 
           placeholder="請輸入費用"
           defaultValue={0}
@@ -23,12 +23,13 @@ const PriceInput = () => {
           invalid={error}
           onChange={e => {
             const value = e.target.value;
-            if (value === '') {
-              setAmount(value);
+            const reg = /^(0|[1-9][0-9.,]*)$/;
+            if (value.length === 0) {
+              setAmount('');
               setError('不可以為空白');
-            } else {
-              const reg = /,/g;
-              setAmount(addComma(value.replace(reg, '')));
+            } else if (reg.test(value)) {
+              const comma = /,/g;
+              setAmount(addComma(value.replace(comma, '')));
               setError('');
             }
           }}
@@ -39,7 +40,7 @@ const PriceInput = () => {
         <ErrorMessage message={error}/>
       }
       <Label 
-        className="price-input-label price-input-text-bottom-right"
+        className="input-label input-text-bottom-right"
       >
         輸入 0 表示免費
       </Label>
