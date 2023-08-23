@@ -31,8 +31,11 @@ const AgePriceGroupList = ({ onChange }) => {
     return getNumberIntervals(ageGroup);
   }, [results]);
 
-  console.log(overlap, notInclude);
+  // console.log(overlap, notInclude);
 
+  useEffect(() => {
+    onChange(results);
+  }, [results]);
   return (
     <Container className="group-wrapper">
       {

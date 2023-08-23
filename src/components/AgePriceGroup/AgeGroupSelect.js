@@ -14,7 +14,7 @@ const AgeGroupSelect = ({ ageGroup, onChange, overlapIntervals }) => {
   }, []);
 
   const isInvalid = overlapIntervals.find(interval => interval.find(i => i === ageGroup[0] || i === ageGroup[1])) ? true : false;
-  console.log(isInvalid);
+  // console.log(isInvalid);
   return (
     <div>
       <Label className="input-label">年齡</Label>
