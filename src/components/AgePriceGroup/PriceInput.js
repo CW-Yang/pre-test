@@ -5,11 +5,10 @@ import {
   InputGroupText, 
   Label 
 } from "reactstrap";
-import addComma from "../utils/addComma";
-import ErrorMessage from "./ErrorMessage";
+import ErrorMessage from "../ErrorMessage";
+import addComma from "../../utils/addComma";
 
-const PriceInput = () => {
-  const [amount, setAmount] = useState(0);
+const PriceInput = ({ price, onChange }) => {
   const [error, setError] = useState('');
   return (
     <div>
@@ -19,17 +18,17 @@ const PriceInput = () => {
         <Input 
           placeholder="請輸入費用"
           defaultValue={0}
-          value={amount}
+          value={price}
           invalid={error}
           onChange={e => {
             const value = e.target.value;
             const reg = /^(0|[1-9][0-9.,]*)$/;
             if (value.length === 0) {
-              setAmount('');
+              onChange();
               setError('不可以為空白');
             } else if (reg.test(value)) {
               const comma = /,/g;
-              setAmount(addComma(value.replace(comma, '')));
+              onChange(addComma(value.replace(comma, '')));
               setError('');
             }
           }}

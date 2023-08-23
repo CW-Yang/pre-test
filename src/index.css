@@ -12,6 +12,22 @@ code {
     monospace;
 }
 
+/* button */
+.add-item-button {
+  color: rgb(20, 185, 185);
+  cursor: pointer;
+}
+
+.remove-item-button {
+  color: red;
+  cursor: pointer;
+}
+
+/* container */
+.group-wrapper {
+  max-width: 720px !important;
+}
+
 /* Input */
 input {
   min-width: 290px !important;
